@@ -53,6 +53,9 @@ class MainWindow(QMainWindow):
         self.label_no_source_points = None
         self.label_no_easting_offsets = None
         self.label_no_northing_offsets = None
+        self.label_db_file = None
+        self.label_sps_source_file = None
+        self.label_check_file = None
 
         # TOOLBAR
         toolbar = QToolBar()
@@ -139,6 +142,14 @@ class MainWindow(QMainWindow):
         self.window_layout.addWidget(QLabel('Limit Easting'), 4, 0)
         self.window_layout.addWidget(QLabel('Limit Northing'), 5, 0)
 
+        self.label_db_file = QLabel('')
+        self.label_sps_source_file = QLabel('')
+        self.label_check_file = QLabel('')
+
+        self.window_layout.addWidget(self.label_db_file, 0, 1)
+        self.window_layout.addWidget(self.label_sps_source_file, 1, 1)
+        self.window_layout.addWidget(self.label_check_file, 2, 1)
+
         self.widget_limit_easting = QLineEdit()
         self.widget_limit_easting.setMaxLength(5)
         self.widget_limit_easting.setText(str(app_info.LIMIT_INLINE))
@@ -181,7 +192,7 @@ class MainWindow(QMainWindow):
         if not self.db_file:
             return
 
-        self.window_layout.addWidget(QLabel(os.path.basename(self.db_file)), 0, 1, Qt.AlignTop)
+        self.label_db_file.setText(os.path.basename(self.db_file))
 
     def open_sps_source_file(self):
         """
@@ -198,8 +209,8 @@ class MainWindow(QMainWindow):
         if not self.sps_source_file:
             return
 
-        self.window_layout.addWidget(QLabel(os.path.basename(self.sps_source_file)), 1, 1)
-        self.window_layout.addWidget(QLabel(os.path.basename(self.sps_source_file) + check.CHECK_EXT), 2, 1)
+        self.label_sps_source_file.setText(os.path.basename(self.sps_source_file))
+        self.label_check_file.setText(os.path.basename(os.path.basename(self.sps_source_file) + check.CHECK_EXT))
 
     def create_db_file(self):
         db_file, _ = QFileDialog.getSaveFileName(
