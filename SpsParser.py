@@ -1,7 +1,7 @@
 """
     SPS Parser
 """
-from parser import Parser
+from Parser import Parser
 
 SRC_DATA_RECORD = 'S'
 RCV_DATA_RECORD = 'R'

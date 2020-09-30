@@ -1,6 +1,6 @@
 import sqlite3
 from sqlite3 import Error
-from sps_parser import Point
+from SpsParser import Point
 
 DB_TABLE = 'plan'
 
