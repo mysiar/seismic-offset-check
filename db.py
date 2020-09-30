@@ -4,12 +4,23 @@ from SpsParser import Point
 
 DB_TABLE = 'plan'
 
+SQL_CREATE_TABLE = """ CREATE TABLE IF NOT EXISTS  %s (
+                lp text NOT NULL PRIMARY KEY,
+                easting real NOT NULL,
+                northing real NOT NULL
+); """ % DB_TABLE
 
-def create_connection(db_file):
+
+def create_db(db_filename):
+    conn = create_connection(db_filename)
+    create_table(conn, SQL_CREATE_TABLE)
+
+
+def create_connection(db_filename):
     """ create a database connection to a SQLite database """
     conn = None
     try:
-        conn = sqlite3.connect(db_file)
+        conn = sqlite3.connect(db_filename)
     except Error as e:
         print(e)
     finally:

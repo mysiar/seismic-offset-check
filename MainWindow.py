@@ -21,6 +21,7 @@ from PyQt5.QtWidgets import (
 import app_info
 import AboutDialog
 import check
+import db
 
 QApplication.setApplicationName(app_info.TITLE)
 QApplication.setApplicationDisplayName(app_info.TITLE)
@@ -64,6 +65,7 @@ class MainWindow(QMainWindow):
         toolbar.addAction(action_db_open)
 
         action_db_create = QAction(QIcon(os.path.join("icons", "tree--plus.png")), "Create DB", self)
+        action_db_create.triggered.connect(self.create_db_file)
         action_db_create.setStatusTip("Create SQLite DB")
 
         action_db_update = QAction(QIcon(os.path.join("icons", "tree--pencil.png")), "Update DB", self)
@@ -172,6 +174,7 @@ class MainWindow(QMainWindow):
             "Open file",
             "",
             "SQLite (*.sqlite );;" "All files (*.*)",
+            # options=QFileDialog.DontUseNativeDialog
         )
 
         if not self.db_file:
@@ -188,6 +191,7 @@ class MainWindow(QMainWindow):
             "Open file",
             "",
             "SPS Source (*.S *.SPS *.s *.sps);;" "All files (*.*)",
+            # options=QFileDialog.DontUseNativeDialog
         )
 
         if not self.sps_source_file:
@@ -195,6 +199,20 @@ class MainWindow(QMainWindow):
 
         self.window_layout.addWidget(QLabel(os.path.basename(self.sps_source_file)), 1, 1)
         self.window_layout.addWidget(QLabel(os.path.basename(self.sps_source_file) + check.CHECK_EXT), 2, 1)
+
+    def create_db_file(self):
+        db_file, _ = QFileDialog.getSaveFileName(
+            self,
+            "Create DB",
+            "",
+            "SQLite files (*.sqlite);;All Files (*)",
+            # options=QFileDialog.DontUseNativeDialog
+        )
+
+        if not db_file:
+            return
+
+        db.create_db(db_file)
 
     def run(self):
         """

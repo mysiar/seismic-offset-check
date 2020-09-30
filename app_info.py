@@ -2,7 +2,7 @@
     App Information and some general settings
 """
 
-VERSION = '0.0.1'
+VERSION = '0.0.2'
 TITLE = 'Offset Check'
 AUTHOR = 'Piotr Synowiec'
 AUTHOR_EMAIL = 'psynowiec@gmail.com'
@@ -13,3 +13,5 @@ MAIN_WINDOW_HEIGHT = 400
 
 LIMIT_INLINE = 6.25
 LIMIT_XLINE = 6.25
+
+APP_DATE = 'September 2020'
