@@ -57,59 +57,69 @@ class MainWindow(QMainWindow):
         toolbar.setIconSize(QSize(16, 16))
         self.addToolBar(toolbar)
 
-        open_db_action = QAction(QIcon(os.path.join("icons", "tree.png")), "Open DB", self)
-        open_db_action.setShortcut(QKeySequence("Ctrl+o"))
-        open_db_action.triggered.connect(self.open_db_file)
-        open_db_action.setStatusTip("Open DB with preplan")
-        toolbar.addAction(open_db_action)
+        action_db_open = QAction(QIcon(os.path.join("icons", "tree.png")), "Open DB", self)
+        action_db_open.setShortcut(QKeySequence("Ctrl+o"))
+        action_db_open.triggered.connect(self.open_db_file)
+        action_db_open.setStatusTip("Open DB with preplan")
+        toolbar.addAction(action_db_open)
 
-        open_sps_source_action = QAction(QIcon(os.path.join("icons", "folder-open-document.png")),
+        action_db_create = QAction(QIcon(os.path.join("icons", "tree--plus.png")), "Create DB", self)
+        action_db_create.setStatusTip("Create SQLite DB")
+
+        action_db_update = QAction(QIcon(os.path.join("icons", "tree--pencil.png")), "Update DB", self)
+        action_db_update.setStatusTip("Update SQLite DB with plan from SPS")
+
+        action_sps_source_open = QAction(QIcon(os.path.join("icons", "folder-open-document.png")),
                                          "Open SPS Source file", self)
-        open_sps_source_action.setShortcut(QKeySequence("Ctrl+o"))
-        open_sps_source_action.triggered.connect(self.open_sps_source_file)
-        open_sps_source_action.setStatusTip("Open daily SPS source point for check")
-        toolbar.addAction(open_sps_source_action)
+        action_sps_source_open.setShortcut(QKeySequence("Ctrl+o"))
+        action_sps_source_open.triggered.connect(self.open_sps_source_file)
+        action_sps_source_open.setStatusTip("Open daily SPS source point for check")
+        toolbar.addAction(action_sps_source_open)
 
         toolbar.addSeparator()
 
-        run_action = QAction(QIcon(os.path.join("icons", "burn.png")), "Run", self)
-        run_action.setShortcut(QKeySequence("Ctrl+r"))
-        run_action.triggered.connect(self.run)
-        run_action.setStatusTip("Run check")
-        toolbar.addAction(run_action)
+        action_run = QAction(QIcon(os.path.join("icons", "burn.png")), "Run", self)
+        action_run.setShortcut(QKeySequence("Ctrl+r"))
+        action_run.triggered.connect(self.run)
+        action_run.setStatusTip("Run check")
+        toolbar.addAction(action_run)
 
         toolbar.addSeparator()
 
-        about_action = QAction(QIcon(os.path.join("icons", "information-button.png")), "About", self)
-        about_action.setShortcut(QKeySequence("Ctrl+i"))
-        about_action.triggered.connect(about)
-        about_action.setStatusTip("About application")
-        toolbar.addAction(about_action)
+        action_about = QAction(QIcon(os.path.join("icons", "information-button.png")), "About", self)
+        action_about.setShortcut(QKeySequence("Ctrl+i"))
+        action_about.triggered.connect(about)
+        action_about.setStatusTip("About application")
+        toolbar.addAction(action_about)
 
         toolbar.addSeparator()
         toolbar.addSeparator()
         toolbar.addSeparator()
         toolbar.addSeparator()
 
-        quit_action = QAction(QIcon(os.path.join("icons", "cross.png")), "Quit", self)
-        quit_action.setShortcut(QKeySequence("Ctrl+q"))
-        quit_action.triggered.connect(qApp.quit)
-        quit_action.setStatusTip("Quit the application")
-        toolbar.addAction(quit_action)
+        action_quit = QAction(QIcon(os.path.join("icons", "cross.png")), "Quit", self)
+        action_quit.setShortcut(QKeySequence("Ctrl+q"))
+        action_quit.triggered.connect(qApp.quit)
+        action_quit.setStatusTip("Quit the application")
+        toolbar.addAction(action_quit)
 
         # MENU
         menu = self.menuBar()
-        file_menu = menu.addMenu("&File")
-        file_menu.addAction(open_db_action)
-        file_menu.addAction(open_sps_source_action)
-        file_menu.addSeparator()
-        file_menu.addAction(quit_action)
+        menu_file = menu.addMenu("&File")
+        menu_file.addAction(action_db_open)
+        menu_file.addAction(action_sps_source_open)
+        menu_file.addSeparator()
+        menu_file.addAction(action_quit)
 
-        run_menu = menu.addMenu("&Run")
-        run_menu.addAction(run_action)
+        menu_run = menu.addMenu("&Run")
+        menu_run.addAction(action_run)
 
-        help_menu = menu.addMenu("&Help")
-        help_menu.addAction(about_action)
+        menu_db = menu.addMenu("&DB")
+        menu_db.addAction(action_db_create)
+        menu_db.addAction(action_db_update)
+
+        menu_help = menu.addMenu("&Help")
+        menu_help.addAction(action_about)
 
         self.setStatusBar(QStatusBar(self))
 
