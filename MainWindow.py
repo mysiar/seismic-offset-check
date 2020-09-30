@@ -2,6 +2,7 @@
     Application Main Window
 """
 import os
+import time
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtGui import QIcon, QKeySequence
 from PyQt5.QtWidgets import (
@@ -218,11 +219,13 @@ class MainWindow(QMainWindow):
         """
             Runs
         """
+        start_time = time.time()
         if self.db_file and self.sps_source_file:
             limit_easting = float(self.widget_limit_easting.text())
             limit_northing = float(self.widget_limit_northing.text())
             result = check.process(self.db_file, self.sps_source_file, limit_easting, limit_northing)
             self.print_stats(result)
+            print("--- %s seconds ---" % (time.time() - start_time))
 
     def print_stats(self, result):
         sp = result['SP']
