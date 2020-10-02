@@ -47,7 +47,6 @@ def insert_record_from_parsed_sps(conn, sps_data):
     line_point = line + point
     easting = sps_data[10]
     northing = sps_data[11]
-    print(line_point)
 
     c = conn.cursor()
     c.execute("SELECT count(*) FROM " + DB_TABLE + " WHERE lp = ?", (line_point,))

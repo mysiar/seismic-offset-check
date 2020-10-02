@@ -23,6 +23,8 @@ import app_info
 import AboutDialog
 import check
 import db
+from DbUpdateForm import DbUpdateForm
+
 
 QApplication.setApplicationName(app_info.TITLE)
 QApplication.setApplicationDisplayName(app_info.TITLE)
@@ -34,6 +36,14 @@ def about():
         Displays Application About Dialog
     """
     dlg = AboutDialog.AboutDialog()
+    dlg.exec_()
+
+def db_update():
+    """
+        Displays Dialog
+    """
+    # dlg = DbUpdate.DbUpdateDialog()
+    dlg = DbUpdateForm()
     dlg.exec_()
 
 
@@ -73,6 +83,7 @@ class MainWindow(QMainWindow):
         action_db_create.setStatusTip("Create SQLite DB")
 
         action_db_update = QAction(QIcon(os.path.join("icons", "tree--pencil.png")), "Update DB", self)
+        action_db_update.triggered.connect(db_update)
         action_db_update.setStatusTip("Update SQLite DB with plan from SPS")
 
         action_sps_source_open = QAction(QIcon(os.path.join("icons", "folder-open-document.png")),
@@ -252,3 +263,4 @@ class MainWindow(QMainWindow):
         self.label_no_source_points.setText(str(sp))
         self.label_no_easting_offsets.setText(s_oce)
         self.label_no_northing_offsets.setText(s_ocn)
+

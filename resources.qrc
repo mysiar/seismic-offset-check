@@ -1,0 +1,7 @@
+<RCC>
+  <qresource prefix="offset_check">
+    <file>icons/cross.png</file>
+    <file>icons/tree.png</file>
+    <file>icons/folder-open-document.png</file>
+  </qresource>
+</RCC>

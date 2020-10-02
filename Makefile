@@ -11,5 +11,8 @@ build:
 	cd ..
 .PHONY: build
 
-var:
-	echo
+ui:
+	pyuic5 ui/UIDbUpdateForm.ui -o UIDbUpdateForm.py
+
+	pyrcc5 resources.qrc -o resources_rc.py
+.PHONY: ui
