@@ -78,7 +78,8 @@ def get_record_for_point(conn, sps_point):
     c.execute("SELECT easting, northing FROM " + DB_TABLE + " WHERE lp=?", (line_point,))
 
     rows = c.fetchall()
+    if len(rows) > 0:
+        data = [rows[0][0], rows[0][1]]
+        return data
 
-    data = [rows[0][0], rows[0][1]]
-
-    return data
+    return None
