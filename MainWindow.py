@@ -2,6 +2,7 @@
     Application Main Window
 """
 import os
+import time
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtGui import QIcon, QKeySequence
 from PyQt5.QtWidgets import (
@@ -21,6 +22,8 @@ from PyQt5.QtWidgets import (
 import app_info
 import AboutDialog
 import check
+import db
+from DbUpdateForm import DbUpdateForm
 
 QApplication.setApplicationName(app_info.TITLE)
 QApplication.setApplicationDisplayName(app_info.TITLE)
@@ -32,6 +35,15 @@ def about():
         Displays Application About Dialog
     """
     dlg = AboutDialog.AboutDialog()
+    dlg.exec_()
+
+
+def db_update():
+    """
+        Displays Dialog
+    """
+    # dlg = DbUpdate.DbUpdateDialog()
+    dlg = DbUpdateForm()
     dlg.exec_()
 
 
@@ -51,6 +63,9 @@ class MainWindow(QMainWindow):
         self.label_no_source_points = None
         self.label_no_easting_offsets = None
         self.label_no_northing_offsets = None
+        self.label_db_file = None
+        self.label_sps_source_file = None
+        self.label_check_file = None
 
         # TOOLBAR
         toolbar = QToolBar()
@@ -64,9 +79,11 @@ class MainWindow(QMainWindow):
         toolbar.addAction(action_db_open)
 
         action_db_create = QAction(QIcon(os.path.join("icons", "tree--plus.png")), "Create DB", self)
+        action_db_create.triggered.connect(self.create_db_file)
         action_db_create.setStatusTip("Create SQLite DB")
 
         action_db_update = QAction(QIcon(os.path.join("icons", "tree--pencil.png")), "Update DB", self)
+        action_db_update.triggered.connect(db_update)
         action_db_update.setStatusTip("Update SQLite DB with plan from SPS")
 
         action_sps_source_open = QAction(QIcon(os.path.join("icons", "folder-open-document.png")),
@@ -136,6 +153,14 @@ class MainWindow(QMainWindow):
         self.window_layout.addWidget(QLabel('Limit Easting'), 4, 0)
         self.window_layout.addWidget(QLabel('Limit Northing'), 5, 0)
 
+        self.label_db_file = QLabel('')
+        self.label_sps_source_file = QLabel('')
+        self.label_check_file = QLabel('')
+
+        self.window_layout.addWidget(self.label_db_file, 0, 1)
+        self.window_layout.addWidget(self.label_sps_source_file, 1, 1)
+        self.window_layout.addWidget(self.label_check_file, 2, 1)
+
         self.widget_limit_easting = QLineEdit()
         self.widget_limit_easting.setMaxLength(5)
         self.widget_limit_easting.setText(str(app_info.LIMIT_INLINE))
@@ -172,12 +197,13 @@ class MainWindow(QMainWindow):
             "Open file",
             "",
             "SQLite (*.sqlite );;" "All files (*.*)",
+            # options=QFileDialog.DontUseNativeDialog
         )
 
         if not self.db_file:
             return
 
-        self.window_layout.addWidget(QLabel(os.path.basename(self.db_file)), 0, 1, Qt.AlignTop)
+        self.label_db_file.setText(os.path.basename(self.db_file))
 
     def open_sps_source_file(self):
         """
@@ -188,18 +214,34 @@ class MainWindow(QMainWindow):
             "Open file",
             "",
             "SPS Source (*.S *.SPS *.s *.sps);;" "All files (*.*)",
+            # options=QFileDialog.DontUseNativeDialog
         )
 
         if not self.sps_source_file:
             return
 
-        self.window_layout.addWidget(QLabel(os.path.basename(self.sps_source_file)), 1, 1)
-        self.window_layout.addWidget(QLabel(os.path.basename(self.sps_source_file) + check.CHECK_EXT), 2, 1)
+        self.label_sps_source_file.setText(os.path.basename(self.sps_source_file))
+        self.label_check_file.setText(os.path.basename(os.path.basename(self.sps_source_file) + check.CHECK_EXT))
+
+    def create_db_file(self):
+        db_file, _ = QFileDialog.getSaveFileName(
+            self,
+            "Create DB",
+            "",
+            "SQLite files (*.sqlite);;All Files (*)",
+            # options=QFileDialog.DontUseNativeDialog
+        )
+
+        if not db_file:
+            return
+
+        db.create_db(db_file)
 
     def run(self):
         """
             Runs
         """
+        start_time = time.time()
         if self.db_file and self.sps_source_file:
             limit_easting = float(self.widget_limit_easting.text())
             limit_northing = float(self.widget_limit_northing.text())

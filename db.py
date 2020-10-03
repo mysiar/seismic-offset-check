@@ -4,12 +4,23 @@ from SpsParser import Point
 
 DB_TABLE = 'plan'
 
+SQL_CREATE_TABLE = """ CREATE TABLE IF NOT EXISTS  %s (
+                lp text NOT NULL PRIMARY KEY,
+                easting real NOT NULL,
+                northing real NOT NULL
+); """ % DB_TABLE
 
-def create_connection(db_file):
+
+def create_db(db_filename):
+    conn = create_connection(db_filename)
+    create_table(conn, SQL_CREATE_TABLE)
+
+
+def create_connection(db_filename):
     """ create a database connection to a SQLite database """
     conn = None
     try:
-        conn = sqlite3.connect(db_file)
+        conn = sqlite3.connect(db_filename)
     except Error as e:
         print(e)
     finally:
@@ -36,7 +47,6 @@ def insert_record_from_parsed_sps(conn, sps_data):
     line_point = line + point
     easting = sps_data[10]
     northing = sps_data[11]
-    print(line_point)
 
     c = conn.cursor()
     c.execute("SELECT count(*) FROM " + DB_TABLE + " WHERE lp = ?", (line_point,))
@@ -68,7 +78,8 @@ def get_record_for_point(conn, sps_point):
     c.execute("SELECT easting, northing FROM " + DB_TABLE + " WHERE lp=?", (line_point,))
 
     rows = c.fetchall()
+    if len(rows) > 0:
+        data = [rows[0][0], rows[0][1]]
+        return data
 
-    data = [rows[0][0], rows[0][1]]
-
-    return data
+    return None

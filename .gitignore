@@ -13,6 +13,7 @@ __pycache__/
 build/
 develop-eggs/
 dist/
+dist-out/
 downloads/
 eggs/
 .eggs/
@@ -139,3 +140,4 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
+*.sqlite
