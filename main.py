@@ -1,11 +1,11 @@
 from PyQt5.QtWidgets import QApplication
-import MainWindow
+import MainWindowOld
 
 
 def main():
     import sys
     app = QApplication(sys.argv)
-    window = MainWindow.MainWindow()
+    window = MainWindowOld.MainWindow()
     window.show()
     app.exec_()
 

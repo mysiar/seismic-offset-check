@@ -5,7 +5,7 @@ from UIDbUpdateForm import Ui_DbUpdateForm
 import dbupdate
 
 
-class DbUpdateForm(QDialog):
+class DbUpdate(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
 
