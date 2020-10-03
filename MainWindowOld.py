@@ -42,7 +42,6 @@ def db_update():
     """
         Displays Dialog
     """
-    # dlg = DbUpdate.DbUpdateDialog()
     dlg = DbUpdate()
     dlg.exec_()
 

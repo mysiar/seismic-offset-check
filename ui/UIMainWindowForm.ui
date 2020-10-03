@@ -32,7 +32,22 @@
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
+   <widget class="QMenu" name="menuRun">
+    <property name="title">
+     <string>Process</string>
+    </property>
+    <addaction name="actionProcess"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionHelp"/>
+    <addaction name="actionAbout"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuRun"/>
+   <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
@@ -45,11 +60,16 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionOpen_DB_File"/>
+   <addaction name="actionOpen_SPS_File"/>
+   <addaction name="actionProcess"/>
+   <addaction name="actionAbout"/>
+   <addaction name="actionQuit"/>
   </widget>
   <action name="actionOpen_DB_File">
    <property name="icon">
     <iconset resource="../resources.qrc">
-     <normaloff>:/offset_check/icons/tree.png</normaloff>:/offset_check/icons/tree.png</iconset>
+     <normaloff>:/offset_check/icons/tree-24.png</normaloff>:/offset_check/icons/tree-24.png</iconset>
    </property>
    <property name="text">
     <string>Open DB File</string>
@@ -61,7 +81,7 @@
   <action name="actionOpen_SPS_File">
    <property name="icon">
     <iconset resource="../resources.qrc">
-     <normaloff>:/offset_check/icons/folder-open-document.png</normaloff>:/offset_check/icons/folder-open-document.png</iconset>
+     <normaloff>:/offset_check/icons/folder-open-document-24.png</normaloff>:/offset_check/icons/folder-open-document-24.png</iconset>
    </property>
    <property name="text">
     <string>Open SPS File</string>
@@ -70,10 +90,40 @@
   <action name="actionQuit">
    <property name="icon">
     <iconset resource="../resources.qrc">
-     <normaloff>:/offset_check/icons/cross.png</normaloff>:/offset_check/icons/cross.png</iconset>
+     <normaloff>:/offset_check/icons/cross-24.png</normaloff>:/offset_check/icons/cross-24.png</iconset>
    </property>
    <property name="text">
     <string>Quit</string>
+   </property>
+  </action>
+  <action name="actionProcess">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/offset_check/icons/burn-24.png</normaloff>:/offset_check/icons/burn-24.png</iconset>
+   </property>
+   <property name="text">
+    <string>Process</string>
+   </property>
+  </action>
+  <action name="actionHelp">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/offset_check/icons/question-button.png</normaloff>:/offset_check/icons/question-button.png</iconset>
+   </property>
+   <property name="text">
+    <string>Help</string>
+   </property>
+   <property name="toolTip">
+    <string>Help</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/offset_check/icons/information-button-24.png</normaloff>:/offset_check/icons/information-button-24.png</iconset>
+   </property>
+   <property name="text">
+    <string>About</string>
    </property>
   </action>
  </widget>
