@@ -25,7 +25,6 @@ import check
 import db
 from DbUpdateForm import DbUpdateForm
 
-
 QApplication.setApplicationName(app_info.TITLE)
 QApplication.setApplicationDisplayName(app_info.TITLE)
 QApplication.setApplicationVersion(app_info.VERSION)
@@ -37,6 +36,7 @@ def about():
     """
     dlg = AboutDialog.AboutDialog()
     dlg.exec_()
+
 
 def db_update():
     """
@@ -247,7 +247,6 @@ class MainWindow(QMainWindow):
             limit_northing = float(self.widget_limit_northing.text())
             result = check.process(self.db_file, self.sps_source_file, limit_easting, limit_northing)
             self.print_stats(result)
-            print("--- %s seconds ---" % (time.time() - start_time))
 
     def print_stats(self, result):
         sp = result['SP']
@@ -263,4 +262,3 @@ class MainWindow(QMainWindow):
         self.label_no_source_points.setText(str(sp))
         self.label_no_easting_offsets.setText(s_oce)
         self.label_no_northing_offsets.setText(s_ocn)
-

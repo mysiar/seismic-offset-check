@@ -5,7 +5,7 @@ from SpsParser import Sps21Parser, Point
 CHECK_CSV_HEADER = 'line,point,easting,northing,check_easting,check_northing,error_easting,error_northing'
 CHECK_EXT = '.check.csv'
 NOT_IN_DB_CSV_HEADER = 'line,point,easting,northing'
-NOT_IN_DB_EXT = '.no-in-db.csv'
+NOT_IN_DB_EXT = '.not-in-db.csv'
 
 
 def process(db_file, sps_file, limit_easting, limit_northing):

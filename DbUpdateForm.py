@@ -1,3 +1,4 @@
+import os
 import time
 from PyQt5.QtWidgets import QDialog, QFileDialog
 from UIDbUpdateForm import Ui_DbUpdateForm
@@ -63,6 +64,7 @@ class DbUpdateForm(QDialog):
         """
             Process
         """
+        self.ui.lblStatus.setText('')
         self.ui.btnProcess.setDisabled(True)
         self.ui.btnDone.setDisabled(True)
         start_time = time.time()
@@ -70,9 +72,10 @@ class DbUpdateForm(QDialog):
 
         if self.db_file and len(sps_files) > 0:
             for sps_file in sps_files:
-                print(sps_file)
                 result = dbupdate.process(self.db_file, sps_file)
-                print("Records: %d --- %.2f seconds ---" % (result, time.time() - start_time))
+                msg = "%s, %d, %.2fs" \
+                      % (os.path.basename(sps_file), result, time.time() - start_time)
+                self.ui.lblStatus.setText(msg)
 
         self.ui.btnProcess.setEnabled(True)
         self.ui.btnDone.setEnabled(True)
