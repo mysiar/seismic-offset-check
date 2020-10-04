@@ -20,6 +20,7 @@ from PyQt5.QtWidgets import (
 )
 
 import app_info
+import check
 import AboutDialog
 
 
@@ -42,13 +43,6 @@ class MainWindow(QMainWindow):
         self.ui = Ui_MainWindowForm()
         self.ui.setupUi(self)
 
-        # self.ui.btnOpenDb.clicked.connect(self.clicked_btn_open_db)
-        # self.ui.btnOpenSPS.clicked.connect(self.clicked_btn_open_sps)
-        # self.ui.btnProcess.clicked.connect(self.clicked_btn_process)
-        # self.ui.btnRemoveSPS.clicked.connect(self.clicked_btn_remove_sps)
-        # self.ui.comboFileType.addItem('SPS 2.1')
-        # self.ui.lblStatus.setText('')
-
         self.ui.actionOpen_DB_File.triggered.connect(self.open_db)
         self.ui.actionOpen_SPS_File.triggered.connect(self.open_sps)
         self.ui.actionProcess.triggered.connect(self.process)
@@ -56,7 +50,7 @@ class MainWindow(QMainWindow):
         self.ui.actionHelp.triggered.connect(help)
 
         # status tips copied from tool tip ?
-        # self.ui.actionOpen_DB_File.setStatusTip(self.ui.actionOpen_DB_File.toolTip())
+        self.ui.actionOpen_DB_File.setStatusTip(self.ui.actionOpen_DB_File.toolTip())
 
         self.ui.lblDb.setText('')
         self.ui.lblSPS.setText('')
@@ -99,43 +93,23 @@ class MainWindow(QMainWindow):
 
         self.ui.lblSPS.setText(self.sps_file)
 
-    #
-    # def clicked_btn_remove_sps(self):
-    #     for i in self.ui.listSPS.selectedItems():
-    #         self.ui.listSPS.takeItem(self.ui.listSPS.row(i))
-    #
-    # def clicked_btn_process(self):
-    #     """
-    #         Process
-    #     """
-    #     self.ui.lblStatus.setText('')
-    #     self.ui.btnProcess.setDisabled(True)
-    #     self.ui.btnDone.setDisabled(True)
-    #     start_time = time.time()
-    #     sps_files = [str(self.ui.listSPS.item(i).text()) for i in range(self.ui.listSPS.count())]
-    #
-    #     if self.db_file and len(sps_files) > 0:
-    #         for sps_file in sps_files:
-    #             result = dbupdate.process(self.db_file, sps_file)
-    #             msg = "%s, %d, %.2fs" \
-    #                   % (os.path.basename(sps_file), result, time.time() - start_time)
-    #             self.ui.lblStatus.setText(msg)
-    #
-    #     self.ui.btnProcess.setEnabled(True)
-    #     self.ui.btnDone.setEnabled(True)
-
     def process(self):
         sps_count = 10000
         self.ui.txtOutput.clear()
 
-        self.print2output('Run')
+        if self.db_file and self.sps_file:
+            self.runner()
 
-        for i in range(20):
-            self.print2output('Running :)')
-
-        self.print2output('Finished')
 
         self.print2output('Number of points processed: %d' % sps_count)
+
+    def runner(self):
+        start_time = time.time()
+        if self.db_file and self.sps_source_file:
+            limit_easting = float(self.ui.limitX.text())
+            limit_northing = float(self.ui.limitY.text())
+            result = check.process(self.db_file, self.sps_file, limit_easting, limit_northing)
+            self.print_stats(result)
 
     def print2output(self, text):
         self.ui.txtOutput.append(text)
