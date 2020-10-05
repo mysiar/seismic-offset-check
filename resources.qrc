@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="offset_check">
+    <file>icons/key-16.png</file>
     <file>icons/burn-16.png</file>
     <file>icons/burn-24.png</file>
     <file>icons/cross-16.png</file>
