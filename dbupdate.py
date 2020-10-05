@@ -2,7 +2,7 @@ import db
 from SpsParser import Sps21Parser
 
 
-def process(db_file, sps_file):
+def process(progress_bar, db_file, sps_file):
     connection = db.create_connection(db_file)
     parser = Sps21Parser()
 
@@ -17,6 +17,8 @@ def process(db_file, sps_file):
 
             line = sps.readline()
             sps_counter += 1
+            progress_bar.setValue(sps_counter)
+
         sps.close()
 
         connection.close()

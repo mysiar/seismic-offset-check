@@ -12,6 +12,7 @@
 
 Output files are created in the same folder where SPS file is.
 
-There are 2 types of output files:
+There are 3 types of output files:
 * **.check.csv** - contains all checked records with Easting & Northing diffs and error flags accordingly to limit
 * **.not-in-db.csv** - contains all records that could not be find in DB
+* **.check.log** - contains all information what has been checked

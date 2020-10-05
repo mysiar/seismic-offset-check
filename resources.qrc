@@ -1,7 +1,20 @@
 <RCC>
   <qresource prefix="offset_check">
-    <file>icons/cross.png</file>
-    <file>icons/tree.png</file>
-    <file>icons/folder-open-document.png</file>
+    <file>icons/burn-16.png</file>
+    <file>icons/burn-24.png</file>
+    <file>icons/cross-16.png</file>
+    <file>icons/cross-24.png</file>
+    <file>icons/folder-open-document-16.png</file>
+    <file>icons/folder-open-document-24.png</file>
+    <file>icons/information-button-16.png</file>
+    <file>icons/information-button-24.png</file>
+    <file>icons/question-button-12.png</file>
+    <file>icons/question-button-24.png</file>
+    <file>icons/tree-16.png</file>
+    <file>icons/tree-24.png</file>
+    <file>icons/tree--pencil-16.png</file>
+    <file>icons/tree--pencil-24.png</file>
+    <file>icons/tree--plus-16.png</file>
+    <file>icons/tree--plus-24.png</file>
   </qresource>
 </RCC>

@@ -52,7 +52,7 @@
           </property>
           <property name="icon">
            <iconset resource="../resources.qrc">
-            <normaloff>:/offset_check/icons/folder-open-document.png</normaloff>:/offset_check/icons/folder-open-document.png</iconset>
+            <normaloff>:/offset_check/icons/folder-open-document-24.png</normaloff>:/offset_check/icons/folder-open-document-24.png</iconset>
           </property>
           <property name="iconSize">
            <size>
@@ -75,7 +75,7 @@
           </property>
           <property name="icon">
            <iconset resource="../resources.qrc">
-            <normaloff>:/offset_check/icons/cross.png</normaloff>:/offset_check/icons/cross.png</iconset>
+            <normaloff>:/offset_check/icons/cross-24.png</normaloff>:/offset_check/icons/cross-24.png</iconset>
           </property>
           <property name="iconSize">
            <size>
@@ -174,14 +174,14 @@
              <string>Select FNS Files</string>
             </property>
             <property name="whatsThis">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Add APS files button&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string/>
             </property>
             <property name="text">
              <string/>
             </property>
             <property name="icon">
              <iconset resource="../resources.qrc">
-              <normaloff>:/offset_check/icons/tree.png</normaloff>:/offset_check/icons/tree.png</iconset>
+              <normaloff>:/offset_check/icons/tree-24.png</normaloff>:/offset_check/icons/tree-24.png</iconset>
             </property>
             <property name="iconSize">
              <size>

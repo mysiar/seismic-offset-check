@@ -83,3 +83,13 @@ def get_record_for_point(conn, sps_point):
         return data
 
     return None
+
+def count_db_records(db_file):
+    conn = create_connection(db_file)
+    sql = "SELECT COUNT(*) FROM " + DB_TABLE
+    c = conn.cursor()
+    c.execute(sql)
+    count = c.fetchone()[0]
+    conn.close()
+
+    return count

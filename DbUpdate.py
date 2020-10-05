@@ -3,9 +3,10 @@ import time
 from PyQt5.QtWidgets import QDialog, QFileDialog
 from UIDbUpdateForm import Ui_DbUpdateForm
 import dbupdate
+import check
 
 
-class DbUpdateForm(QDialog):
+class DbUpdate(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
 
@@ -71,8 +72,11 @@ class DbUpdateForm(QDialog):
         sps_files = [str(self.ui.listSPS.item(i).text()) for i in range(self.ui.listSPS.count())]
 
         if self.db_file and len(sps_files) > 0:
+
             for sps_file in sps_files:
-                result = dbupdate.process(self.db_file, sps_file)
+                line_numbers = check.count_file_line_number(sps_file)
+                self.ui.progressBar.setMaximum(line_numbers)
+                result = dbupdate.process(self.ui.progressBar, self.db_file, sps_file)
                 msg = "%s, %d, %.2fs" \
                       % (os.path.basename(sps_file), result, time.time() - start_time)
                 self.ui.lblStatus.setText(msg)
