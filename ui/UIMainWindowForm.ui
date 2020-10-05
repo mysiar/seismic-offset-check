@@ -316,6 +316,7 @@
      <string>Help</string>
     </property>
     <addaction name="actionHelp"/>
+    <addaction name="actionLicense"/>
     <addaction name="actionAbout"/>
    </widget>
    <widget class="QMenu" name="menuDB">
@@ -406,6 +407,15 @@
    </property>
    <property name="text">
     <string>Update DB</string>
+   </property>
+  </action>
+  <action name="actionLicense">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/offset_check/icons/key-16.png</normaloff>:/offset_check/icons/key-16.png</iconset>
+   </property>
+   <property name="text">
+    <string>License</string>
    </property>
   </action>
  </widget>

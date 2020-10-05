@@ -10,3 +10,4 @@ AUTHOR_WEB = 'https://github.com/mysiar'
 
 APP_DATE = 'September 2020'
 HELP_URL = 'https://github.com/mysiar/seismic-offset-check/blob/master/doc/index.md'
+LICENSE_URL = 'https://github.com/mysiar/seismic-offset-check/blob/master/LICENSE'

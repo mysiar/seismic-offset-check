@@ -24,6 +24,10 @@ def help():
     webbrowser.open(app_info.HELP_URL)
 
 
+def license():
+    webbrowser.open(app_info.LICENSE_URL)
+
+
 def db_update():
     """
         Displays Dialog
@@ -43,6 +47,7 @@ class MainWindow(QMainWindow):
         self.ui.actionOpen_SPS_File.triggered.connect(self.open_sps)
         self.ui.actionProcess.triggered.connect(self.process)
         self.ui.actionAbout.triggered.connect(about)
+        self.ui.actionLicense.triggered.connect(license)
         self.ui.actionHelp.triggered.connect(help)
         self.ui.actionQuit.triggered.connect(self.close_application)
         self.ui.actionCreate_DB.triggered.connect(self.create_db_file)
