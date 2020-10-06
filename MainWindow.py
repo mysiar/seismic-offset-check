@@ -151,10 +151,16 @@ class MainWindow(QMainWindow):
     def settings_save(self):
         self.settings.setValue(app_settings.LIMIT_X, self.ui.limitX.text())
         self.settings.setValue(app_settings.LIMIT_Y, self.ui.limitY.text())
+        self.settings.setValue(app_settings.DB_PATH, self.db_file)
 
     def settings_read(self):
         self.ui.limitX.setText(self.settings.value(app_settings.LIMIT_X, '0.0', type=str))
         self.ui.limitY.setText(self.settings.value(app_settings.LIMIT_Y, '0.0', type=str))
+        db_file = self.settings.value(app_settings.DB_PATH, '', type=str)
+        if 0 == len(db_file):
+            db_file = None
+        self.db_file = db_file
+        self.ui.lblDb.setText(db_file)
 
     def close_application(self):
         self.settings_save()
