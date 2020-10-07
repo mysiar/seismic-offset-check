@@ -1,9 +1,11 @@
 import os
 import time
+from datetime import datetime
 from PyQt5.QtWidgets import QDialog, QFileDialog
 from UIDbUpdateForm import Ui_DbUpdateForm
 import dbupdate
 import check
+import db
 
 
 class DbUpdate(QDialog):
@@ -71,6 +73,8 @@ class DbUpdate(QDialog):
         start_time = time.time()
         sps_files = [str(self.ui.listSPS.item(i).text()) for i in range(self.ui.listSPS.count())]
 
+        db_log_file = self.db_file + db.DB_LOG_FILE_EXT
+
         if self.db_file and len(sps_files) > 0:
 
             for sps_file in sps_files:
@@ -80,6 +84,12 @@ class DbUpdate(QDialog):
                 msg = "%s, %d, %.2fs" \
                       % (os.path.basename(sps_file), result, time.time() - start_time)
                 self.ui.lblStatus.setText(msg)
+                check.log_file_record_add(db_log_file, f"Updated: {datetime.today().strftime('%Y-%m-%d %H:%M:%S')}")
+                check.log_file_record_add(db_log_file, 'Input file: %s' % sps_file)
+                check.log_file_record_add(db_log_file, 'No of records processed: %d' % result)
+                check.log_file_record_add(db_log_file, 'Elapsed time %.2f sec' % (time.time() - start_time))
+                check.log_file_record_add(db_log_file,
+                                          '-----------------------------------------------------------------')
 
         self.ui.btnProcess.setEnabled(True)
         self.ui.btnDone.setEnabled(True)

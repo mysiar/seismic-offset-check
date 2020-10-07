@@ -178,6 +178,10 @@ class MainWindow(QMainWindow):
         if not db_file:
             return
 
-        if not db_file.endswith('.sqlite'):
-            db_file += '.sqlite'
+        if not db_file.endswith(db.DB_FILE_EXT):
+            db_file += db.DB_FILE_EXT
         db.create_db(db_file)
+        db_log_file = db_file + db.DB_LOG_FILE_EXT
+        check.log_file_create(db_log_file)
+        check.log_file_record_add(db_log_file, f"Created: {datetime.today().strftime('%Y-%m-%d %H:%M:%S')}")
+        check.log_file_record_add(db_log_file, '-----------------------------------------------------------------')
