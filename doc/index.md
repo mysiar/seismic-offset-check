@@ -4,6 +4,8 @@
 1. create DB: menu _**DB->Create DB**_ - creates SQLite DB file and table structure
 2. update DB: menu _**DB->Update DB**_ - select DB to update and all SPS files you want to load (preplot, operation plan, etc)
 
+**_create DB_** action creates log file and **~~update DB~~** action update the log
+
 ![DB Update](0.2.0-dbu.png)
 
 ### Check

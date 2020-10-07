@@ -3,6 +3,8 @@ from sqlite3 import Error
 from SpsParser import Point
 
 DB_TABLE = 'plan'
+DB_FILE_EXT = '.sqlite'
+DB_LOG_FILE_EXT = '.log'
 
 SQL_CREATE_TABLE = """ CREATE TABLE IF NOT EXISTS  %s (
                 lp text NOT NULL PRIMARY KEY,
@@ -83,6 +85,7 @@ def get_record_for_point(conn, sps_point):
         return data
 
     return None
+
 
 def count_db_records(db_file):
     conn = create_connection(db_file)
