@@ -163,7 +163,7 @@ class Ui_MainWindowForm(object):
         self.toolBar.addAction(self.actionOpen_DB_File)
         self.toolBar.addAction(self.actionOpen_SPS_File)
         self.toolBar.addAction(self.actionProcess)
-        self.toolBar.addAction(self.actionAbout)
+        self.toolBar.addAction(self.actionHelp)
         self.toolBar.addAction(self.actionQuit)
         self.menuFile.addAction(self.actionOpen_DB_File)
         self.menuFile.addAction(self.actionOpen_SPS_File)
