@@ -10,6 +10,18 @@
     <height>484</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>450</width>
+    <height>484</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>450</width>
+    <height>484</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>DB Update</string>
   </property>
@@ -260,6 +272,13 @@
        </size>
       </property>
      </spacer>
+    </item>
+    <item>
+     <widget class="QPushButton" name="btnProcessFast">
+      <property name="text">
+       <string>Process Fast</string>
+      </property>
+     </widget>
     </item>
     <item>
      <widget class="QPushButton" name="btnProcess">

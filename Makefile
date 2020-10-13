@@ -5,6 +5,7 @@ GIT_TAG = $(shell git describe --tags)
 ui:
 	pyuic5 ui/UIDbUpdateForm.ui -o UIDbUpdateForm.py
 	pyuic5 ui/UIMainWindowForm.ui -o UIMainWindowForm.py
+	pyuic5 ui/UIWarning.ui -o UIWarning.py
 
 	pyrcc5 resources.qrc -o resources_rc.py
 .PHONY: ui
