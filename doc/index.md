@@ -6,7 +6,12 @@
 
 **_create DB_** action creates log file and **~~update DB~~** action update the log
 
-![DB Update](0.2.0-dbu.png)
+![DB Update](0.3.0-dbu.png)
+
+There are two ways to update DB:
+* **_Process Fast_** assumes that you do not have duplicates in already loaded plan and SPS you try to upload - always try it first.
+If it fails it will present the message and ask to use **~~Process~~** method
+* **_Process_** slower updating db one by one with new points
 
 ### Check
 1. select DB
