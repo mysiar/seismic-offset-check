@@ -12,7 +12,7 @@ ui:
 
 build:
 	rm -rf ./build ./dist
-	pyinstaller main.py -n OffsetCheck --windowed
+	pyinstaller main.py --hidden-import hook-sqlalchemy.py -n OffsetCheck --windowed
 	mkdir -p dist/OffsetCheck/icons
 	cp -r icons/vibrator-48.png dist/OffsetCheck/icons
 	#cp -r icons/ dist/OffsetCheck
