@@ -1,6 +1,6 @@
 import sqlite3
 from sqlite3 import Error
-from SpsParser import Point
+from FixedWidthTextParser.Seismic.SpsParser import Point
 
 DB_TABLE = 'plan'
 DB_FILE_EXT = '.sqlite'

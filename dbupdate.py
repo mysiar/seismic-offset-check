@@ -1,7 +1,7 @@
 import db
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from SpsParser import Sps21Parser
+from FixedWidthTextParser.Seismic.SpsParser import Sps21Parser
 from model.Plan import Plan
 from model.Base import Base
 
