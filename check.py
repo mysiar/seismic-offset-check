@@ -1,6 +1,8 @@
 import os
 import db
-from SpsParser import Sps21Parser, Point
+
+from FixedWidthTextParser.Seismic.SpsParser import Sps21Parser, Point
+
 
 CHECK_CSV_HEADER = 'line,point,easting,northing,check_easting,check_northing,error_easting,error_northing'
 CHECK_EXT = '.check.csv'
