@@ -214,42 +214,43 @@ class MainWindow(QMainWindow):
             offset_counter_y = 0
             while line:
                 stats = parser.parse_point(line)
-                point = Point(stats)
+                if stats is not None:
+                    point = Point(stats)
 
-                stats = db.get_record_for_point(connection, point)
+                    stats = db.get_record_for_point(connection, point)
 
-                if stats is None:
-                    sps_counter += 1
-                    not_in_db_counter += 1
-                    record = "%.2f,%.2f,%.1f,%.1f" \
+                    if stats is None:
+                        sps_counter += 1
+                        not_in_db_counter += 1
+                        record = "%.2f,%.2f,%.1f,%.1f" \
+                                 % (
+                                     point.line, point.point, point.easting, point.northing)
+                        common.csv_file_record_add(not_in_db_file, record)
+                        line = sps.readline()
+                        continue
+                    de = point.easting - stats[0]
+                    dn = point.northing - stats[1]
+
+                    error_easting = 0
+                    if abs(de) > limit_x:
+                        offset_counter_x += 1
+                        error_easting = 1
+
+                    error_northing = 0
+                    if abs(dn) > limit_y:
+                        offset_counter_y += 1
+                        error_northing = 1
+
+                    record = "%.2f,%.2f,%.1f,%.1f,%.1f,%.1f,%d,%d" \
                              % (
-                                 point.line, point.point, point.easting, point.northing)
-                    common.csv_file_record_add(not_in_db_file, record)
-                    line = sps.readline()
-                    continue
-                de = point.easting - stats[0]
-                dn = point.northing - stats[1]
+                                 point.line, point.point, point.easting, point.northing, de, dn, error_easting,
+                                 error_northing)
+                    common.csv_file_record_add(check_file, record)
 
-                error_easting = 0
-                if abs(de) > limit_x:
-                    offset_counter_x += 1
-                    error_easting = 1
-
-                error_northing = 0
-                if abs(dn) > limit_y:
-                    offset_counter_y += 1
-                    error_northing = 1
-
-                record = "%.2f,%.2f,%.1f,%.1f,%.1f,%.1f,%d,%d" \
-                         % (
-                             point.line, point.point, point.easting, point.northing, de, dn, error_easting,
-                             error_northing)
-                common.csv_file_record_add(check_file, record)
+                    sps_counter += 1
+                    self.ui.progressBar.setValue(sps_counter)
 
                 line = sps.readline()
-                sps_counter += 1
-
-                self.ui.progressBar.setValue(sps_counter)
 
             sps.close()
 

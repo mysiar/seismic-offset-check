@@ -106,12 +106,13 @@ class DbUpdate(QDialog):
                     msg = "%s, %d, %.2fs" \
                           % (os.path.basename(sps_file), result, time.time() - start_time)
                     self.ui.lblStatus.setText(msg)
-                    common.log_file_record_add(db_log_file, f"Updated: {datetime.today().strftime('%Y-%m-%d %H:%M:%S')}")
+                    common.log_file_record_add(db_log_file,
+                                               f"Updated: {datetime.today().strftime('%Y-%m-%d %H:%M:%S')}")
                     common.log_file_record_add(db_log_file, 'Input file: %s' % sps_file)
                     common.log_file_record_add(db_log_file, 'No of records processed: %d' % result)
                     common.log_file_record_add(db_log_file, 'Elapsed time %.2f sec' % (time.time() - start_time))
                     common.log_file_record_add(db_log_file,
-                                              '-----------------------------------------------------------------')
+                                               '-----------------------------------------------------------------')
 
             self.ui.btnProcess.setEnabled(True)
             self.ui.btnDone.setEnabled(True)
@@ -133,31 +134,32 @@ class DbUpdate(QDialog):
 
             while line:
                 sps_data = parser.parse_point(line)
-                line = str(int(sps_data[1]))
-                point = str(int(sps_data[2]))
-                line_point = line + point
-                easting = sps_data[10]
-                northing = sps_data[11]
+                if sps_data is not None:
+                    line = str(int(sps_data[1]))
+                    point = str(int(sps_data[2]))
+                    line_point = line + point
+                    easting = sps_data[10]
+                    northing = sps_data[11]
 
-                p = Plan(lp=line_point, easting=easting, northing=northing)
-                try:
-                    s.add(p)
-                    if fast is False:
-                        s.commit()
-                except:
-                    pass
+                    p = Plan(lp=line_point, easting=easting, northing=northing)
+                    try:
+                        s.add(p)
+                        if fast is False:
+                            s.commit()
+                    except:
+                        pass
 
-                sps_counter += 1
-                self.ui.progressBar.setValue(sps_counter)
+                    sps_counter += 1
+                    self.ui.progressBar.setValue(sps_counter)
 
                 line = sps.readline()
 
-            if fast is True:
-                try:
-                    s.commit()
-                except:
-                    self.warning_process()
+        if fast is True:
+            try:
+                s.commit()
+            except:
+                self.warning_process()
 
-            sps.close()
+        sps.close()
 
         return sps_counter
