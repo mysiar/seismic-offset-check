@@ -8,8 +8,16 @@ import AboutDialog
 import DbUpdate
 import app_info
 import app_settings
-import check
+import common
 import db
+from FixedWidthTextParser.Seismic.SpsParser import Sps21Parser, Point
+from Warning import Warning
+
+CHECK_CSV_HEADER = 'line,point,easting,northing,check_easting,check_northing,error_easting,error_northing'
+CHECK_EXT = '.check.csv'
+NOT_IN_DB_CSV_HEADER = 'line,point,easting,northing'
+NOT_IN_DB_EXT = '.not-in-db.csv'
+LOG_EXT = '.check.log'
 
 
 def about():
@@ -66,6 +74,11 @@ class MainWindow(QMainWindow):
 
         self.settings_read()
 
+    def warning_nothing_to_process(self):
+        dlg = Warning()
+        dlg.set_label('Are you dumb ?\nWhat do you want to process ?\nSelect both DB & SPS files')
+        dlg.exec_()
+
     def open_db(self):
         """
             Opens DB file
@@ -101,21 +114,19 @@ class MainWindow(QMainWindow):
             self.sps_file = previous_sps_file
 
         self.ui.lblSPS.setText(self.sps_file)
-        self.log_file = self.sps_file + check.LOG_EXT
+        self.log_file = self.sps_file + LOG_EXT
 
     def process(self):
-        # self.ui.txtOutput.clear()
-
         if self.db_file and self.sps_file:
             self.runner()
         else:
-            print('error process')
+            self.warning_nothing_to_process()
 
     def runner(self):
-        check.log_file_create(self.log_file)
+        common.log_file_create(self.log_file)
         start_time = time.time()
         if self.db_file and self.sps_file:
-            line_numbers = check.count_file_line_number(self.sps_file)
+            line_numbers = common.count_file_line_number(self.sps_file)
             self.ui.progressBar.setMaximum(line_numbers)
             limit_x = float(self.ui.limitX.text())
             limit_y = float(self.ui.limitY.text())
@@ -125,7 +136,7 @@ class MainWindow(QMainWindow):
             self.log('SPS: %s' % self.sps_file)
             self.log('SPS record count: %d' % line_numbers)
             self.log('Limits: E: %.2f, N: %.2f' % (limit_x, limit_y))
-            result = check.process(self.ui.progressBar, self.db_file, self.sps_file, limit_x, limit_y)
+            result = self.check(limit_x, limit_y)
             timing = time.time() - start_time
             point_count = result['PC']
             not_in_db_count = result['NDB']
@@ -146,7 +157,7 @@ class MainWindow(QMainWindow):
 
     def log(self, text):
         self.print2output(text)
-        check.log_file_record_add(self.log_file, text)
+        common.log_file_record_add(self.log_file, text)
 
     def settings_save(self):
         self.settings.setValue(app_settings.LIMIT_X, self.ui.limitX.text())
@@ -181,7 +192,74 @@ class MainWindow(QMainWindow):
         if not db_file.endswith(db.DB_FILE_EXT):
             db_file += db.DB_FILE_EXT
         db.create_db(db_file)
-        db_log_file = db_file + db.DB_LOG_FILE_EXT
-        check.log_file_create(db_log_file)
-        check.log_file_record_add(db_log_file, f"Created: {datetime.today().strftime('%Y-%m-%d %H:%M:%S')}")
-        check.log_file_record_add(db_log_file, '-----------------------------------------------------------------')
+        db_log_file = db_file + common.DB_LOG_FILE_EXT
+        common.log_file_create(db_log_file)
+        common.log_file_record_add(db_log_file, f"Created: {datetime.today().strftime('%Y-%m-%d %H:%M:%S')}")
+        common.log_file_record_add(db_log_file, '-----------------------------------------------------------------')
+
+    def check(self, limit_x, limit_y):
+        connection = db.create_connection(self.db_file)
+        parser = Sps21Parser()
+        check_file = self.sps_file + CHECK_EXT
+        not_in_db_file = self.sps_file + NOT_IN_DB_EXT
+
+        common.csv_file_create(check_file, CHECK_CSV_HEADER)
+        common.csv_file_create(not_in_db_file, NOT_IN_DB_CSV_HEADER)
+
+        with open(self.sps_file) as sps:
+            line = sps.readline()
+            sps_counter = 0
+            not_in_db_counter = 0
+            offset_counter_x = 0
+            offset_counter_y = 0
+            while line:
+                stats = parser.parse_point(line)
+                point = Point(stats)
+
+                stats = db.get_record_for_point(connection, point)
+
+                if stats is None:
+                    sps_counter += 1
+                    not_in_db_counter += 1
+                    record = "%.2f,%.2f,%.1f,%.1f" \
+                             % (
+                                 point.line, point.point, point.easting, point.northing)
+                    common.csv_file_record_add(not_in_db_file, record)
+                    line = sps.readline()
+                    continue
+                de = point.easting - stats[0]
+                dn = point.northing - stats[1]
+
+                error_easting = 0
+                if abs(de) > limit_x:
+                    offset_counter_x += 1
+                    error_easting = 1
+
+                error_northing = 0
+                if abs(dn) > limit_y:
+                    offset_counter_y += 1
+                    error_northing = 1
+
+                record = "%.2f,%.2f,%.1f,%.1f,%.1f,%.1f,%d,%d" \
+                         % (
+                             point.line, point.point, point.easting, point.northing, de, dn, error_easting,
+                             error_northing)
+                common.csv_file_record_add(check_file, record)
+
+                line = sps.readline()
+                sps_counter += 1
+
+                self.ui.progressBar.setValue(sps_counter)
+
+            sps.close()
+
+            stats = {
+                'PC': sps_counter,
+                'NDB': not_in_db_counter,
+                'OCX': offset_counter_x,
+                'OCY': offset_counter_y
+            }
+
+            connection.close()
+
+            return stats

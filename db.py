@@ -4,7 +4,6 @@ from FixedWidthTextParser.Seismic.SpsParser import Point
 
 DB_TABLE = 'plan'
 DB_FILE_EXT = '.sqlite'
-DB_LOG_FILE_EXT = '.log'
 
 SQL_CREATE_TABLE = """ CREATE TABLE IF NOT EXISTS  %s (
                 lp text NOT NULL PRIMARY KEY,

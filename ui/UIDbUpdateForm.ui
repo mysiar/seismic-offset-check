@@ -29,9 +29,9 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>190</y>
+     <y>130</y>
      <width>428</width>
-     <height>169</height>
+     <height>241</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -155,7 +155,7 @@
      <x>10</x>
      <y>10</y>
      <width>428</width>
-     <height>169</height>
+     <height>111</height>
     </rect>
    </property>
    <property name="sizePolicy">

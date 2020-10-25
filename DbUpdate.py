@@ -3,10 +3,14 @@ import time
 from datetime import datetime
 from PyQt5.QtWidgets import QDialog, QFileDialog
 from UIDbUpdateForm import Ui_DbUpdateForm
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
 from Warning import Warning
-import dbupdate
-import check
-import db
+import common
+from FixedWidthTextParser.Seismic.SpsParser import Sps21Parser
+from model.Plan import Plan
+from model.Base import Base
 
 
 class DbUpdate(QDialog):
@@ -90,23 +94,23 @@ class DbUpdate(QDialog):
             self.ui.btnDone.setDisabled(True)
             start_time = time.time()
 
-            db_log_file = self.db_file + db.DB_LOG_FILE_EXT
+            db_log_file = self.db_file + common.DB_LOG_FILE_EXT
 
             if self.db_file and len(sps_files) > 0:
 
                 for sps_file in sps_files:
-                    line_numbers = check.count_file_line_number(sps_file)
+                    line_numbers = common.count_file_line_number(sps_file)
                     self.ui.progressBar.setMaximum(line_numbers)
 
-                    result = dbupdate.process(self.ui.progressBar, self.db_file, sps_file, fast, self)
+                    result = self.process(sps_file, fast)
                     msg = "%s, %d, %.2fs" \
                           % (os.path.basename(sps_file), result, time.time() - start_time)
                     self.ui.lblStatus.setText(msg)
-                    check.log_file_record_add(db_log_file, f"Updated: {datetime.today().strftime('%Y-%m-%d %H:%M:%S')}")
-                    check.log_file_record_add(db_log_file, 'Input file: %s' % sps_file)
-                    check.log_file_record_add(db_log_file, 'No of records processed: %d' % result)
-                    check.log_file_record_add(db_log_file, 'Elapsed time %.2f sec' % (time.time() - start_time))
-                    check.log_file_record_add(db_log_file,
+                    common.log_file_record_add(db_log_file, f"Updated: {datetime.today().strftime('%Y-%m-%d %H:%M:%S')}")
+                    common.log_file_record_add(db_log_file, 'Input file: %s' % sps_file)
+                    common.log_file_record_add(db_log_file, 'No of records processed: %d' % result)
+                    common.log_file_record_add(db_log_file, 'Elapsed time %.2f sec' % (time.time() - start_time))
+                    common.log_file_record_add(db_log_file,
                                               '-----------------------------------------------------------------')
 
             self.ui.btnProcess.setEnabled(True)
@@ -114,35 +118,46 @@ class DbUpdate(QDialog):
         else:
             self.warning_nothing_to_update()
 
-    def clicked_btn_process_old(self, fast=False):
-        """
-            Process
-        """
-        sps_files = [str(self.ui.listSPS.item(i).text()) for i in range(self.ui.listSPS.count())]
+    def process(self, sps_file, fast):
+        engine = create_engine('sqlite:///' + self.db_file)
+        session = sessionmaker()
+        session.configure(bind=engine)
+        Base.metadata.create_all(engine)
+        s = session()
 
-        if self.db_file and len(sps_files) > 0:
-            self.ui.lblStatus.setText('')
-            self.ui.btnProcess.setDisabled(True)
-            self.ui.btnDone.setDisabled(True)
-            start_time = time.time()
+        parser = Sps21Parser()
 
-            db_log_file = self.db_file + db.DB_LOG_FILE_EXT
+        with open(sps_file) as sps:
+            line = sps.readline()
+            sps_counter = 0
 
-            if self.db_file and len(sps_files) > 0:
+            while line:
+                sps_data = parser.parse_point(line)
+                line = str(int(sps_data[1]))
+                point = str(int(sps_data[2]))
+                line_point = line + point
+                easting = sps_data[10]
+                northing = sps_data[11]
 
-                for sps_file in sps_files:
-                    line_numbers = check.count_file_line_number(sps_file)
-                    self.ui.progressBar.setMaximum(line_numbers)
-                    result = dbupdate.process_old(self.ui.progressBar, self.db_file, sps_file)
-                    msg = "%s, %d, %.2fs" \
-                          % (os.path.basename(sps_file), result, time.time() - start_time)
-                    self.ui.lblStatus.setText(msg)
-                    check.log_file_record_add(db_log_file, f"Updated: {datetime.today().strftime('%Y-%m-%d %H:%M:%S')}")
-                    check.log_file_record_add(db_log_file, 'Input file: %s' % sps_file)
-                    check.log_file_record_add(db_log_file, 'No of records processed: %d' % result)
-                    check.log_file_record_add(db_log_file, 'Elapsed time %.2f sec' % (time.time() - start_time))
-                    check.log_file_record_add(db_log_file,
-                                              '-----------------------------------------------------------------')
+                p = Plan(lp=line_point, easting=easting, northing=northing)
+                try:
+                    s.add(p)
+                    if fast is False:
+                        s.commit()
+                except:
+                    pass
 
-            self.ui.btnProcess.setEnabled(True)
-            self.ui.btnDone.setEnabled(True)
+                sps_counter += 1
+                self.ui.progressBar.setValue(sps_counter)
+
+                line = sps.readline()
+
+            if fast is True:
+                try:
+                    s.commit()
+                except:
+                    self.warning_process()
+
+            sps.close()
+
+        return sps_counter
