@@ -23,6 +23,11 @@ build:
 .PHONY: build
 
 build-osx:
+	rm -rf ./build ./dist
+	mkdir -p dist-out
+	pyinstaller main.py --hidden-import hook-sqlalchemy.py -n OffsetCheck --windowed
+	cd dist; \
+	tar zcvf ../dist-out/OffsetCheck-"${GIT_TAG}".osx.tgz *; \
+	cd ..
 	@echo "TAG: ${GIT_TAG}"
-	@echo "Not implemented yet"
 .PHONY: build-osx
