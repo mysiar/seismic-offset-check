@@ -2,7 +2,7 @@
     App Information
 """
 
-VERSION = '0.3.0'
+VERSION = '0.4.0'
 TITLE = 'Offset Check'
 AUTHOR = 'Piotr Synowiec'
 AUTHOR_EMAIL = 'psynowiec@gmail.com'
